@@ -1,0 +1,33 @@
+package com.tencent.wxcloudrun.controller;
+
+import com.github.plexpt.chatgpt.Chatbot;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.PostConstruct;
+import java.util.Map;
+
+@RestController
+@Slf4j
+public class AiChatController {
+
+    private Chatbot chatbot;
+
+    @PostConstruct
+    public void init() {
+        if (chatbot == null) {
+            chatbot = new Chatbot("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..rhR28jXfkuPkM7oj.gtmV0KXzYEBfhbVj789s_dsKq9UEdvkHGD3aCBNHDg3EDStrsiDuG7DVll3fDmGP0f03v6xG58B1LkZIae_yYg5Svx2zmO_cAT3hEaps8M3yPaNSFtc8NnjTVQy4grkQldlhpH2Dn-9zIOocYI0QBeGb5Bqxq-4M2XXfu5nHXba-JLGn_78L9fIqJR0gnyHgjHtLcho8MqSX2_XArVq49jQb7Mw28Oa5u3F2cr5yVmxPt2Ff1Fkb9mc-t4S2AtQ1EkmztsY-pAhMeog5zn6nSIJdwFe3DZqz1472d0hsvZcChzs6n6exivpEjvH5SDNI2TteOh4-AqYR8VhO65-qsR3FfMfb5p9rWmaKugjIQJg-8AhP_2fTOfDaZu6b84URr0792zVmg7oge5P-tUMx0tKrSMRMNDTve1oLzwW2R3mskdR_TpxTePq8JUIVA5GAZRhRw5hZwA1JVicAQ_JEmGLw5E5VGiQWsCqNWdCdtyBibpZCxPD2FO8rNU5uGZtZ1k5fYUUukjkaci2LKpWyy_ywpxgGxRjwSGXQScyAI1L0EWoPyqBPhzbOrlktdX8PlUX4BXl82QzdvE_DKFp6oxCcMqB4XxLOXwagej0CRM0okpK6JGtQsx7kH5RNOF4fYXMt_X1Svu_kOI6cEmwT4CAcIWYuDex0AMsDFdHTAC9tJ7lZYpsL1hPH53WzhcFImhVKN8mgQUtjNQeJaTaoHQcOlaB27Q1RWKKoPzd4NN1VLEQ_YSZaCU8WnirGVcBrEvNsNss72Fy6pwdqNTSwlL91uiMBTN-ayZSlGEwjCjcd5uEmlulSx3QPBZjieXFq4P0fclzw7nL1anNPK75SS76ZpJRAd9VQ-CRrGeGCvmgnptgv-Fvqt-JXnx_7HsZ2Hc5OMumlrwmTacvAc_i3YhWYMYdYKxliymxMYmZSOJTqcMZuMjykdxWKCOQa1SLg6e3yH88qWDeKNJVUTHblkfmBiJAR9CKgwJX-3vZq8xxMNse05FfJ5Y2FMi5QbaQSBsByC90nO1_g2cioKZqpo82so5U1dzuvtFhZQ1UW5P9Omy_WENHszisbUweKFRHH1RYLGrTh2JfFkDJ63kfZNGo4YojqLck-sQvwQLfVDECxcoO4EcteCRl7It26O_WktMG6WYheF3kQFBvfC6wlZO8wZhXWPy9m5eKItbQQBG4YpZDF4a-MR93RtsaGzg8t0DzoM6KGQIjsHVMWyT1UNAHgndfuN0DY7azN5PF2064bvRCrTkkYeKEXj4PLD1ZaHymKOemFJVRU8hIMZNG5SBd43KTJmikejDyKEz2dkrwgLYFmuHl8FpuL8Cw6NNPmOkcNyz39xRDyN-TZmBoiVITWV0y6jwCo4A-exQrWAOEA7txpCwuLjzz5anJ3mWrR32ZPMgNT4yVZtdBftO8w9-obYJiVL_gKIAutIkqFvrxAodFYGJCXCrPOQ4JF-j_FArsvnUwn73YpuTKpdk1ttikQU7IvToromV_wdsHCE5D-i7Qemax6OAPH1kkAYuN6rUCFeMbxxg2Qzn60KiSpQJU19ktiXPyGMFMm4fWAAGGwLscqC14_HjvOWglWHRf5wdKGAwFZgIq4j1poKrpz4fEfVZxEqHj7O6N09RLApOmNEMFYIqoPYDlNnCQhfszWlGvK3axNWjJcJ1-eocH7fk7WZxuLVGSWDbLzxA0_AXfCV_rPV91radbdZyC7wmvnbXe_O4wrCYdgvO1Y774WL7vhBkENcaRrTNnk84ProAmDWRJG2c2L9DeEq0iLA0pIlVTJXRr1FRX6bDA3-pMbUSLsokwx9B3gyW7UqqXRPzz7wjiZasOaIXLQ5lIhOyhR-bjKZwGqcT8wT2KT0wluFHC8VCKE1zIQgWG8728eI-DgMAA8VLQ6OUjR2bmNUJkk8gLR6TfV3bpSXgYc3E5Sy5NAHf8rVXKgopTIsAs3-rvGXDhjrPZr5_Vp75uNmw3y0OJJJCoPqRENExk3dm-3vlNGdVeFAvu9BFM0cGp-iD8bUNymV5xgN1_cAZlA0s8x-K1n3XaGneRaGmcZY8mtkbH01vq4889zYC9Xty5dAkdVJuOZogtYMdmisLozbFoyG560wryrMebVF2t3_ggDKPZ8sM6bQWXNc3eoiOcelOzUFcDN66xSWq7zXpK0mcVgJn-w9QaCZUZx2sZjPBZG-dWhr2PfDzLNz5shoLUZrpGz8DlF0Wg_LMYPrz96C6N3U0R8tnzbUsgsE4bK6V8vWPVGDxoMyK7jj2gT_0AtY4wCnzeganqZ_NDZxMCGBFIN7GPNIhToOlPjJoyMCoQ0xbLnVdo8kAvu-gCwhDkWbK3WGj-6UvsNUu5qCKTT2ETGCQEDOVwxWmrIApxRvw.aiRwQGaKrGcflx0O5mtPdA");
+        }
+    }
+
+    @GetMapping("/api/aichat/chat")
+    public String generate(@RequestParam String message) {
+        Map<String, Object> chatResponse = chatbot.getChatResponse(message);
+        log.info("requestMessage=" + message + ";chatResponse==" + chatResponse);
+        String responseMessage = MapUtils.getString(chatResponse, "message");
+        return responseMessage;
+    }
+}
